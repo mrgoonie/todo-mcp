@@ -1,0 +1,17 @@
+node_modules
+.git
+.env
+*.db
+*.log
+.DS_Store
+coverage
+.nyc_output
+dist
+tmp
+.vscode
+.idea
+README.md
+*.test.ts
+*.spec.ts
+__tests__
+tests

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mcp-todo:
+    build: .
+    container_name: mcp-todo-server
+    environment:
+      - DATABASE_PATH=/data/todo.db
+      - MCP_SERVER_NAME=mcp-todo
+      - MCP_SERVER_VERSION=1.0.0
+      - NOTIFICATION_WEBHOOK=${NOTIFICATION_WEBHOOK:-}
+    volumes:
+      - todo-data:/data
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  todo-data:
+    driver: local
