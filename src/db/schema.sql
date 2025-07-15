@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS todo_lists (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     description TEXT,
+    metadata TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS todo_items (
     due_date DATETIME,
     snoozed_until DATETIME,
     completed_at DATETIME,
+    metadata TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (list_id) REFERENCES todo_lists(id) ON DELETE CASCADE
