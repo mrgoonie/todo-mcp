@@ -1,6 +1,6 @@
-# Discord TODO MCP Server
+# TODO MCP Server
 
-A Model Context Protocol (MCP) server for managing todo lists and items with Discord webhook notifications, built with Bun and TypeScript.
+A Model Context Protocol (MCP) server for managing todo lists and items with webhook notifications, built with Bun and TypeScript.
 
 ## Features
 
@@ -25,7 +25,7 @@ A Model Context Protocol (MCP) server for managing todo lists and items with Dis
 - **Filtering**: Filter by assignee, tags, status, priority, due dates
 - **Sorting**: Sort by time, priority, creation date, or update date
 - **Pagination**: Limit and offset for large datasets
-- **Discord Notifications**: Webhook notifications for approaching deadlines
+- **Notifications**: Webhook notifications for approaching deadlines
 
 ## Installation
 
@@ -49,8 +49,8 @@ cp .env.example .env
 
 ### Environment Variables
 ```env
-# Discord webhook URL for task notifications (optional)
-NOTIFICATION_WEBHOOK=https://discord.com/api/webhooks/your-webhook-url
+# webhook URL for task notifications (optional)
+NOTIFICATION_WEBHOOK=http://localhost:3000/api/webhooks/your-webhook-url
 
 # Database configuration
 DATABASE_PATH=./todo.db
@@ -180,12 +180,12 @@ docker run -d \
   mcp-todo
 ```
 
-## Discord Notifications
+## Notifications
 
 When a `NOTIFICATION_WEBHOOK` is configured, the server will:
 
 1. Check for tasks with due dates within the next hour every 5 minutes
-2. Send Discord webhook notifications for upcoming deadlines
+2. Send webhook notifications for upcoming deadlines
 3. Automatically snooze notifications for 1 hour to avoid spam
 4. Include task details like title, assignee, priority, and tags
 
@@ -193,16 +193,28 @@ When a `NOTIFICATION_WEBHOOK` is configured, the server will:
 ```json
 {
   "content": "Task deadline approaching!",
-  "embeds": [{
-    "title": "Task Title",
-    "description": "Task description",
-    "color": 16711680,
-    "fields": [
-      {"name": "Assignee", "value": "john.doe", "inline": true},
-      {"name": "Priority", "value": "high", "inline": true},
-      {"name": "Due Date", "value": "2024-12-31T23:59:59Z", "inline": true}
-    ]
-  }]
+  "data": {
+    "id": "string";
+    "list_id": "string";
+    "title": "string";
+    "description": "string";
+    "assignee": "string";
+    "priority": "none"; // none, low, medium, high
+    "status": "completed"; // pending, in_progress, completed, cancelled
+    "tags": [];
+    "due_date": Date;
+    "snoozed_until": Date;
+    "recurrence": {
+      "type": "daily"; // daily, weekly, monthly, weekdays 
+      "weekdays": []; // 0-6 for Sunday-Saturday
+      "day_of_month": 1; // 1-31
+      "next_due": Date;
+    };
+    "completed_at"?: Date;
+    "created_at": Date;
+    "updated_at": Date;
+    "metadata": {};
+  }
 }
 ```
 
@@ -268,7 +280,7 @@ This project is licensed under the MIT License.
 
 1. **Database locked error**: Ensure only one instance of the server is running
 2. **Permission denied**: Check file permissions for the database path
-3. **Webhook not working**: Verify the Discord webhook URL is correct and accessible
+3. **Webhook not working**: Verify the webhook URL is correct and accessible
 
 ### Debug Mode
 Set `NODE_ENV=development` to enable additional logging.
